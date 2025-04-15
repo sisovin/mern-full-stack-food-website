@@ -8,5 +8,5 @@ module.exports = {
       tsconfig: 'tsconfig.json',
     },
   },
-  setupFiles: ['<rootDir>/.env.test'],
+  setupFilesAfterEnv: ['<rootDir>/.env.test'],
 };
