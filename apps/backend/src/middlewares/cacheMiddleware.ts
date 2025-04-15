@@ -1,16 +1,16 @@
-import client from '../config/redis';
+import { setCache, getCache } from '../utils/cacheUtils';
 
 const cacheMiddleware = async (req, res, next) => {
   const key = req.originalUrl;
 
   try {
-    const cachedData = await client.get(key);
+    const cachedData = await getCache(key);
     if (cachedData) {
-      return res.status(200).json(JSON.parse(cachedData));
+      return res.status(200).json(cachedData);
     } else {
       res.sendResponse = res.send;
       res.send = async (body) => {
-        await client.set(key, JSON.stringify(body), 'EX', 3600); // Cache for 1 hour
+        await setCache(key, body, 3600); // Cache for 1 hour
         res.sendResponse(body);
       };
       next();

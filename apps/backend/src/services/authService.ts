@@ -1,6 +1,6 @@
 import User from '../models/User';
 import jwt from 'jsonwebtoken';
-import argon2 from 'argon2';
+import { hashPassword, verifyPassword } from '../utils/argon2';
 
 const registerUser = async (username: string, email: string, password: string) => {
   const existingUser = await User.findOne({ email });
@@ -8,7 +8,7 @@ const registerUser = async (username: string, email: string, password: string) =
     throw new Error('User already exists');
   }
 
-  const hashedPassword = await argon2.hash(password);
+  const hashedPassword = await hashPassword(password);
   const newUser = new User({ username, email, password: hashedPassword });
   await newUser.save();
 
@@ -25,7 +25,7 @@ const loginUser = async (email: string, password: string) => {
     throw new Error('Invalid email or password');
   }
 
-  const isPasswordValid = await argon2.verify(user.password, password);
+  const isPasswordValid = await verifyPassword(user.password, password);
   if (!isPasswordValid) {
     throw new Error('Invalid email or password');
   }

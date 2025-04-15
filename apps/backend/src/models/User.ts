@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import argon2 from 'argon2';
+import { hashPassword, verifyPassword } from '../utils/argon2';
 
 interface IUser extends Document {
   username: string;
@@ -30,7 +30,7 @@ UserSchema.pre<IUser>('save', async function (next) {
     return next();
   }
   try {
-    const hashedPassword = await argon2.hash(this.password);
+    const hashedPassword = await hashPassword(this.password);
     this.password = hashedPassword;
     next();
   } catch (err) {
@@ -39,7 +39,7 @@ UserSchema.pre<IUser>('save', async function (next) {
 });
 
 UserSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
-  return argon2.verify(this.password, candidatePassword);
+  return verifyPassword(this.password, candidatePassword);
 };
 
 const User = mongoose.model<IUser>('User', UserSchema);
