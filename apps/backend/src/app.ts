@@ -7,6 +7,9 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import i18next from './config/i18n';
+import { generateToken, verifyToken } from './config/jwt';
+import logger from './config/winston';
 
 // Import config
 import './config/db'; // MongoDB connection is initialized here
@@ -68,7 +71,7 @@ app.use(compression());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-/* app.use(logger); */
+app.use(logger);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
