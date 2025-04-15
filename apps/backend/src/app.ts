@@ -17,13 +17,14 @@ import wss from './websockets/socketServer';
 import './config/db'; // MongoDB connection is initialized here
 
 // Import routes
-/* import authRoutes from './routes/authRoutes';
+import authRoutes from './routes/authRoutes';
 import userRoutes from './routes/userRoutes';
 import roleRoutes from './routes/roleRoutes';
 import menuRoutes from './routes/menuRoutes';
 import bookingRoutes from './routes/bookingRoutes';
 import blogRoutes from './routes/blogRoutes';
-import faqRoutes from './routes/faqRoutes'; */
+import faqRoutes from './routes/faqRoutes';
+import orderRoutes from './routes/orderRoutes';
 
 // Import middlewares
 import { authMiddleware } from './middlewares/authMiddleware';
@@ -86,13 +87,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 // API routes
 const apiPrefix = process.env.API_PREFIX || '/api';
 
-/* app.use(`${apiPrefix}/auth`, authRoutes);
+app.use(`${apiPrefix}/auth`, authRoutes);
 app.use(`${apiPrefix}/users`, userRoutes);
 app.use(`${apiPrefix}/roles`, roleRoutes);
 app.use(`${apiPrefix}/menu`, menuRoutes);
 app.use(`${apiPrefix}/bookings`, bookingRoutes);
 app.use(`${apiPrefix}/blogs`, blogRoutes);
-app.use(`${apiPrefix}/faqs`, faqRoutes); */
+app.use(`${apiPrefix}/faqs`, faqRoutes);
+app.use(`${apiPrefix}/orders`, orderRoutes);
 
 // Health check endpoint
 app.get('/health', (req: Request, res: Response) => {
