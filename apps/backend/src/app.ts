@@ -9,7 +9,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 
 // Import config
-/* import './config/db'; // MongoDB connection is initialized here */
+import './config/db'; // MongoDB connection is initialized here
 
 // Import routes
 /* import authRoutes from './routes/authRoutes';
