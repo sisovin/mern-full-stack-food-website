@@ -10,6 +10,8 @@ import morgan from 'morgan';
 import i18next from './config/i18n';
 import { generateToken, verifyToken } from './config/jwt';
 import logger from './config/winston';
+import http from 'http';
+import wss from './websockets/socketServer';
 
 // Import config
 import './config/db'; // MongoDB connection is initialized here
@@ -111,5 +113,15 @@ app.all('*', (req: Request, res: Response) => {
 
 // Global error handler middleware
 app.use(errorHandler);
+
+// Create HTTP server
+const server = http.createServer(app);
+
+// Add WebSocket server to HTTP server
+server.on('upgrade', (request, socket, head) => {
+  wss.handleUpgrade(request, socket, head, (ws) => {
+    wss.emit('connection', ws, request);
+  });
+});
 
 export default app;
