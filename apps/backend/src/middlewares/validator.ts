@@ -1,4 +1,4 @@
-import { validationResult } from 'express-validator';
+import { validateUserRegistration, validateUserLogin } from '../utils/validators';
 
 const validatorMiddleware = (req, res, next) => {
   const errors = validationResult(req);
@@ -8,4 +8,4 @@ const validatorMiddleware = (req, res, next) => {
   next();
 };
 
-export { validatorMiddleware };
+export { validatorMiddleware, validateUserRegistration, validateUserLogin };

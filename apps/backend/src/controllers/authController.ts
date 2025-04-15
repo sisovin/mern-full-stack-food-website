@@ -1,12 +1,13 @@
 import { registerUser, loginUser, refreshToken, logoutUser } from '../services/authService';
+import { successResponse, errorResponse } from '../utils/responseHandler';
 
 const register = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     const { user, token } = await registerUser(username, email, password);
-    res.status(201).json({ user, token });
+    successResponse(res, { user, token }, 'User registered successfully', 201);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    errorResponse(res, error, 'User registration failed', 400);
   }
 };
 
@@ -14,9 +15,9 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const { user, token } = await loginUser(email, password);
-    res.status(200).json({ user, token });
+    successResponse(res, { user, token }, 'User logged in successfully');
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    errorResponse(res, error, 'User login failed', 400);
   }
 };
 
@@ -24,9 +25,9 @@ const refreshToken = async (req, res) => {
   try {
     const { token } = req.body;
     const newToken = await refreshToken(token);
-    res.status(200).json({ token: newToken });
+    successResponse(res, { token: newToken }, 'Token refreshed successfully');
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    errorResponse(res, error, 'Token refresh failed', 400);
   }
 };
 
@@ -34,9 +35,9 @@ const logout = async (req, res) => {
   try {
     const { userId } = req.body;
     await logoutUser(userId);
-    res.status(200).json({ message: 'Logged out successfully' });
+    successResponse(res, null, 'Logged out successfully');
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    errorResponse(res, error, 'Logout failed', 400);
   }
 };
 
