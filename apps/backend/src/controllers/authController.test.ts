@@ -87,6 +87,15 @@ describe('Auth Controller', () => {
       expect(res.statusCode).toEqual(400);
       expect(res.body).toHaveProperty('message', 'Token refresh failed');
     });
+
+    it('should not refresh with expired token', async () => {
+      const expiredToken = 'expiredToken'; // Replace with actual expired token
+      const res = await request(app)
+        .post('/api/auth/refresh-token')
+        .send({ token: expiredToken });
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('message', 'Token refresh failed');
+    });
   });
 
   describe('GET /api/auth/logout', () => {
@@ -97,6 +106,14 @@ describe('Auth Controller', () => {
         .send({ userId: user._id });
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('message', 'Logged out successfully');
+    });
+
+    it('should not logout with invalid user ID', async () => {
+      const res = await request(app)
+        .get('/api/auth/logout')
+        .send({ userId: 'invalidUserId' });
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('message', 'Logout failed');
     });
   });
 });
