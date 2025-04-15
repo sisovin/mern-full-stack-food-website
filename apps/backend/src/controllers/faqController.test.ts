@@ -56,4 +56,25 @@ describe('FAQ Controller', () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('message', 'FAQ deleted successfully');
   });
+
+  it('should return 400 when creating an FAQ with missing fields', async () => {
+    const res = await request(app)
+      .post('/api/faqs')
+      .send({
+        question: 'Incomplete FAQ',
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toHaveProperty('message');
+  });
+
+  it('should return 400 for invalid FAQ ID', async () => {
+    const res = await request(app)
+      .put('/api/faqs/invalidFAQId')
+      .send({
+        question: 'Invalid FAQ ID',
+        answer: 'This is an invalid FAQ ID',
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toHaveProperty('message');
+  });
 });

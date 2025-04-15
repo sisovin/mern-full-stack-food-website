@@ -38,6 +38,15 @@ describe('User Controller', () => {
 
       expect(res.statusCode).toEqual(404);
     });
+
+    it('should return 400 for invalid user ID', async () => {
+      const res = await request(app)
+        .get('/api/users/invalidUserId')
+        .set('Authorization', `Bearer ${token}`);
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('message');
+    });
   });
 
   describe('PUT /api/users/:id', () => {
@@ -58,6 +67,16 @@ describe('User Controller', () => {
         .send({ email: 'invalidEmail' });
 
       expect(res.statusCode).toEqual(400);
+    });
+
+    it('should return 400 for missing fields', async () => {
+      const res = await request(app)
+        .put(`/api/users/${userId}`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({});
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('message');
     });
   });
 

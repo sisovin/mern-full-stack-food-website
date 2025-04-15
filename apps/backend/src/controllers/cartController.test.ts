@@ -56,6 +56,16 @@ describe('Cart Controller', () => {
       expect(res.body).toHaveProperty('items');
       expect(res.body.items.length).toBe(1);
     });
+
+    it('should return 400 for invalid product ID', async () => {
+      const res = await request(app)
+        .post(`/api/cart/${userId}/add`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ productId: 'invalidProductId', quantity: 1 });
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('message');
+    });
   });
 
   describe('POST /api/cart/:userId/remove', () => {
@@ -68,6 +78,16 @@ describe('Cart Controller', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('items');
       expect(res.body.items.length).toBe(0);
+    });
+
+    it('should return 400 for non-existent product ID', async () => {
+      const res = await request(app)
+        .post(`/api/cart/${userId}/remove`)
+        .set('Authorization', `Bearer ${token}`)
+        .send({ productId: 'nonExistentProductId' });
+
+      expect(res.statusCode).toEqual(400);
+      expect(res.body).toHaveProperty('message');
     });
   });
 

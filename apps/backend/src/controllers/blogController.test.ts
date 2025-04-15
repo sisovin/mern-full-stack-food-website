@@ -57,4 +57,22 @@ describe('Blog Controller', () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('message', 'Blog deleted successfully');
   });
+
+  it('should return an empty array when there are no blog posts', async () => {
+    await Blog.deleteMany({});
+    const res = await request(app).get('/api/blogs');
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBe(0);
+  });
+
+  it('should return 400 when creating a blog post with missing fields', async () => {
+    const res = await request(app)
+      .post('/api/blogs')
+      .send({
+        title: 'Incomplete Blog',
+      });
+    expect(res.statusCode).toEqual(400);
+    expect(res.body).toHaveProperty('message');
+  });
 });

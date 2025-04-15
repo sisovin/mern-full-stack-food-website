@@ -29,6 +29,17 @@ describe('Menu Controller', () => {
     menuItemId = response.body._id;
   });
 
+  it('should return 400 when creating a menu item with missing fields', async () => {
+    const response = await request(app)
+      .post('/api/menu')
+      .send({
+        name: 'Incomplete Menu Item',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message');
+  });
+
   it('should get all menu items', async () => {
     const response = await request(app).get('/api/menu');
 
@@ -55,6 +66,20 @@ describe('Menu Controller', () => {
 
     expect(response.status).toBe(200);
     expect(response.body.name).toBe('Updated Test Menu Item');
+  });
+
+  it('should return 400 for invalid menu item ID', async () => {
+    const response = await request(app)
+      .put('/api/menu/invalidMenuItemId')
+      .send({
+        name: 'Invalid Menu Item',
+        description: 'Invalid Description',
+        price: 12.99,
+        category: 'Invalid Category',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message');
   });
 
   it('should delete a menu item', async () => {
