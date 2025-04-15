@@ -24,8 +24,13 @@ import blogRoutes from './routes/blogRoutes';
 import faqRoutes from './routes/faqRoutes'; */
 
 // Import middlewares
-/* import { errorHandler } from './middlewares/errorHandler';
-import { logger } from './middlewares/logger'; */
+import { authMiddleware } from './middlewares/authMiddleware';
+import cacheMiddleware from './middlewares/cacheMiddleware';
+import { errorHandler } from './middlewares/errorHandler';
+import { loggerMiddleware } from './middlewares/logger';
+import rateLimiter from './middlewares/rateLimiter';
+import { validatorMiddleware } from './middlewares/validator';
+import corsMiddleware from './middlewares/corsMiddleware';
 
 const app: Express = express();
 
@@ -71,7 +76,7 @@ app.use(compression());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-app.use(logger);
+app.use(loggerMiddleware);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -105,6 +110,6 @@ app.all('*', (req: Request, res: Response) => {
 });
 
 // Global error handler middleware
-/* app.use(errorHandler); */
+app.use(errorHandler);
 
 export default app;
