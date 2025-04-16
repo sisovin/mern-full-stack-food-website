@@ -1,14 +1,15 @@
 import i18next from 'i18next';
 import Backend from 'i18next-fs-backend';
-import LanguageDetector from 'i18next-browser-languagedetector';
+import i18nextMiddleware from 'i18next-http-middleware';
+import path from 'path';
 
 i18next
   .use(Backend)
-  .use(LanguageDetector)
+  .use(i18nextMiddleware.LanguageDetector)
   .init({
     fallbackLng: 'en',
     backend: {
-      loadPath: './locales/{{lng}}/{{ns}}.json'
+      loadPath: path.join(__dirname, '../locales/{{lng}}/{{ns}}.json')
     },
     detection: {
       order: ['querystring', 'cookie'],
@@ -16,4 +17,4 @@ i18next
     }
   });
 
-export default i18next;
+export { i18next, i18nextMiddleware };

@@ -1,0 +1,23 @@
+{
+  "welcome": "¡Bienvenido a nuestro restaurante!",
+  "menu": {
+    "title": "Menú",
+    "description": "Explora nuestros deliciosos platos."
+  },
+  "booking": {
+    "title": "Reservar una mesa",
+    "description": "Reserva una mesa para tu ocasión especial."
+  },
+  "blog": {
+    "title": "Blog",
+    "description": "Lee nuestras últimas noticias y recetas."
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "description": "Encuentra respuestas a preguntas comunes."
+  },
+  "contact": {
+    "title": "Contáctanos",
+    "description": "Ponte en contacto con nosotros para cualquier consulta."
+  }
+}
