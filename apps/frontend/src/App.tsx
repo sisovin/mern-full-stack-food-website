@@ -10,7 +10,10 @@ import { CartProvider } from './context/CartContext';
 import { UIProvider } from './context/UIContext';
 import useAuth from './hooks/useAuth';
 import Home from './pages/Home/Home';
-import BookTable from './pages/BookTable/BookTable'; // P54d7
+import BookTable from './pages/BookTable/BookTable';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import BlogPage from './pages/Blog/BlogPage';
+import BlogDetailPage from './pages/Blog/BlogDetailPage';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -46,8 +49,14 @@ function App() {
     <UIProvider>
       <AuthProvider>
         <CartProvider>
-          <Home />
-          <BookTable /> {/* P9e37 */}
+          <Router>
+            <Switch>
+              <Route exact path="/" component={Home} />
+              <Route path="/book-table" component={BookTable} />
+              <Route path="/blogs" component={BlogPage} />
+              <Route path="/blogs/:id" component={BlogDetailPage} />
+            </Switch>
+          </Router>
         </CartProvider>
       </AuthProvider>
     </UIProvider>
