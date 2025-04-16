@@ -1,6 +1,7 @@
 import request from 'supertest';
 import app from '../../app';
 import Booking from '../../models/Booking';
+import nock from 'nock';
 
 describe('Booking Controller', () => {
   let bookingId;
@@ -16,6 +17,16 @@ describe('Booking Controller', () => {
   });
 
   it('should create a new booking', async () => {
+    nock('http://localhost:3000')
+      .post('/api/bookings')
+      .reply(201, {
+        _id: 'mockBookingId',
+        customerName: 'John Doe',
+        date: '2023-05-01',
+        time: '18:00',
+        numberOfGuests: 4,
+      });
+
     const response = await request(app)
       .post('/api/bookings')
       .send({
@@ -31,6 +42,18 @@ describe('Booking Controller', () => {
   });
 
   it('should get all bookings', async () => {
+    nock('http://localhost:3000')
+      .get('/api/bookings')
+      .reply(200, [
+        {
+          _id: 'mockBookingId',
+          customerName: 'John Doe',
+          date: '2023-05-01',
+          time: '18:00',
+          numberOfGuests: 4,
+        },
+      ]);
+
     const response = await request(app).get('/api/bookings');
 
     expect(response.status).toBe(200);
@@ -38,6 +61,16 @@ describe('Booking Controller', () => {
   });
 
   it('should get a booking by ID', async () => {
+    nock('http://localhost:3000')
+      .get(`/api/bookings/${bookingId}`)
+      .reply(200, {
+        _id: 'mockBookingId',
+        customerName: 'John Doe',
+        date: '2023-05-01',
+        time: '18:00',
+        numberOfGuests: 4,
+      });
+
     const response = await request(app).get(`/api/bookings/${bookingId}`);
 
     expect(response.status).toBe(200);
@@ -45,6 +78,16 @@ describe('Booking Controller', () => {
   });
 
   it('should update a booking', async () => {
+    nock('http://localhost:3000')
+      .put(`/api/bookings/${bookingId}`)
+      .reply(200, {
+        _id: 'mockBookingId',
+        customerName: 'Jane Doe',
+        date: '2023-05-01',
+        time: '18:00',
+        numberOfGuests: 4,
+      });
+
     const response = await request(app)
       .put(`/api/bookings/${bookingId}`)
       .send({
@@ -56,6 +99,12 @@ describe('Booking Controller', () => {
   });
 
   it('should delete a booking', async () => {
+    nock('http://localhost:3000')
+      .delete(`/api/bookings/${bookingId}`)
+      .reply(200, {
+        message: 'Booking deleted successfully',
+      });
+
     const response = await request(app).delete(`/api/bookings/${bookingId}`);
 
     expect(response.status).toBe(200);

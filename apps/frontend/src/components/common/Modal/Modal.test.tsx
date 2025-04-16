@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Modal from './Modal';
+import nock from 'nock';
 
 describe('Modal component', () => {
   test('renders Modal component when isOpen is true', () => {
@@ -33,5 +34,21 @@ describe('Modal component', () => {
     const closeButton = screen.getByText(/Close/i);
     fireEvent.click(closeButton);
     expect(handleClose).toHaveBeenCalledTimes(1);
+  });
+
+  test('mocks API call for modal component', async () => {
+    nock('http://localhost:3000')
+      .get('/api/modal-data')
+      .reply(200, {
+        data: 'Mock Modal Data',
+      });
+
+    const { getByText } = render(
+      <Modal isOpen={true} onClose={() => {}}>
+        <div>Mock Modal Data</div>
+      </Modal>
+    );
+    const modalContent = getByText(/Mock Modal Data/i);
+    expect(modalContent).toBeInTheDocument();
   });
 });

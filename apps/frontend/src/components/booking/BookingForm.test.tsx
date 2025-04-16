@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react';
 import BookingForm from './BookingForm';
 import { createBooking } from '../../api/booking.api';
+import nock from 'nock';
 
 jest.mock('../../api/booking.api');
 
@@ -15,6 +16,16 @@ describe('BookingForm', () => {
   });
 
   test('submits form with valid data', async () => {
+    nock('http://localhost:3000')
+      .post('/api/booking')
+      .reply(201, {
+        data: {
+          date: '2023-04-15',
+          time: '18:00',
+          partySize: 4,
+        },
+      });
+
     const { getByLabelText, getByText } = render(<BookingForm />);
     const dateInput = getByLabelText(/date/i);
     const timeInput = getByLabelText(/time/i);

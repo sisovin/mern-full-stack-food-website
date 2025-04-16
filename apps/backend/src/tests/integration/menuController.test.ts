@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import Menu from '../../models/Menu';
 import { connect, disconnect } from '../../config/db';
+import nock from 'nock';
 
 beforeAll(async () => {
   await connect();
@@ -15,6 +16,16 @@ describe('Menu Controller', () => {
   let menuItemId;
 
   it('should create a new menu item', async () => {
+    nock('http://localhost:3000')
+      .post('/api/menu')
+      .reply(201, {
+        _id: 'mockMenuItemId',
+        name: 'Test Menu Item',
+        description: 'Test Description',
+        price: 10.99,
+        category: 'Test Category',
+      });
+
     const response = await request(app)
       .post('/api/menu')
       .send({
@@ -30,6 +41,12 @@ describe('Menu Controller', () => {
   });
 
   it('should return 400 when creating a menu item with missing fields', async () => {
+    nock('http://localhost:3000')
+      .post('/api/menu')
+      .reply(400, {
+        message: 'Menu item creation failed',
+      });
+
     const response = await request(app)
       .post('/api/menu')
       .send({
@@ -41,6 +58,18 @@ describe('Menu Controller', () => {
   });
 
   it('should get all menu items', async () => {
+    nock('http://localhost:3000')
+      .get('/api/menu')
+      .reply(200, [
+        {
+          _id: 'mockMenuItemId',
+          name: 'Test Menu Item',
+          description: 'Test Description',
+          price: 10.99,
+          category: 'Test Category',
+        },
+      ]);
+
     const response = await request(app).get('/api/menu');
 
     expect(response.status).toBe(200);
@@ -48,6 +77,16 @@ describe('Menu Controller', () => {
   });
 
   it('should get a menu item by id', async () => {
+    nock('http://localhost:3000')
+      .get(`/api/menu/${menuItemId}`)
+      .reply(200, {
+        _id: 'mockMenuItemId',
+        name: 'Test Menu Item',
+        description: 'Test Description',
+        price: 10.99,
+        category: 'Test Category',
+      });
+
     const response = await request(app).get(`/api/menu/${menuItemId}`);
 
     expect(response.status).toBe(200);
@@ -55,6 +94,16 @@ describe('Menu Controller', () => {
   });
 
   it('should update a menu item', async () => {
+    nock('http://localhost:3000')
+      .put(`/api/menu/${menuItemId}`)
+      .reply(200, {
+        _id: 'mockMenuItemId',
+        name: 'Updated Test Menu Item',
+        description: 'Updated Test Description',
+        price: 12.99,
+        category: 'Updated Test Category',
+      });
+
     const response = await request(app)
       .put(`/api/menu/${menuItemId}`)
       .send({
@@ -69,6 +118,12 @@ describe('Menu Controller', () => {
   });
 
   it('should return 400 for invalid menu item ID', async () => {
+    nock('http://localhost:3000')
+      .put('/api/menu/invalidMenuItemId')
+      .reply(400, {
+        message: 'Invalid menu item ID',
+      });
+
     const response = await request(app)
       .put('/api/menu/invalidMenuItemId')
       .send({
@@ -83,6 +138,12 @@ describe('Menu Controller', () => {
   });
 
   it('should delete a menu item', async () => {
+    nock('http://localhost:3000')
+      .delete(`/api/menu/${menuItemId}`)
+      .reply(200, {
+        message: 'Menu item deleted successfully',
+      });
+
     const response = await request(app).delete(`/api/menu/${menuItemId}`);
 
     expect(response.status).toBe(200);

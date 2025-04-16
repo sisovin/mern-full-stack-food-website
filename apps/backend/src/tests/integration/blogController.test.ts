@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import Blog from '../../models/Blog';
 import mongoose from 'mongoose';
+import nock from 'nock';
 
 beforeAll(async () => {
   const url = `mongodb://127.0.0.1/blog_test`;
@@ -17,6 +18,15 @@ describe('Blog Controller', () => {
   let blogId;
 
   it('should create a new blog post', async () => {
+    nock('http://localhost:3000')
+      .post('/api/blogs')
+      .reply(201, {
+        _id: 'mockBlogId',
+        title: 'Test Blog',
+        content: 'This is a test blog post',
+        author: 'mockAuthorId',
+      });
+
     const res = await request(app)
       .post('/api/blogs')
       .send({
@@ -30,18 +40,47 @@ describe('Blog Controller', () => {
   });
 
   it('should get all blog posts', async () => {
+    nock('http://localhost:3000')
+      .get('/api/blogs')
+      .reply(200, [
+        {
+          _id: 'mockBlogId',
+          title: 'Test Blog',
+          content: 'This is a test blog post',
+          author: 'mockAuthorId',
+        },
+      ]);
+
     const res = await request(app).get('/api/blogs');
     expect(res.statusCode).toEqual(200);
     expect(res.body).toBeInstanceOf(Array);
   });
 
   it('should get a blog post by id', async () => {
+    nock('http://localhost:3000')
+      .get(`/api/blogs/${blogId}`)
+      .reply(200, {
+        _id: 'mockBlogId',
+        title: 'Test Blog',
+        content: 'This is a test blog post',
+        author: 'mockAuthorId',
+      });
+
     const res = await request(app).get(`/api/blogs/${blogId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('_id', blogId);
   });
 
   it('should update a blog post', async () => {
+    nock('http://localhost:3000')
+      .put(`/api/blogs/${blogId}`)
+      .reply(200, {
+        _id: 'mockBlogId',
+        title: 'Updated Test Blog',
+        content: 'This is an updated test blog post',
+        author: 'mockAuthorId',
+      });
+
     const res = await request(app)
       .put(`/api/blogs/${blogId}`)
       .send({
@@ -53,6 +92,12 @@ describe('Blog Controller', () => {
   });
 
   it('should delete a blog post', async () => {
+    nock('http://localhost:3000')
+      .delete(`/api/blogs/${blogId}`)
+      .reply(200, {
+        message: 'Blog deleted successfully',
+      });
+
     const res = await request(app).delete(`/api/blogs/${blogId}`);
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('message', 'Blog deleted successfully');
