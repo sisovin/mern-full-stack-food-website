@@ -26,3 +26,21 @@ export const deleteBooking = async (bookingId: string) => {
     throw error;
   }
 };
+
+export const getAllBookings = async () => {
+  try {
+    const response = await axiosInstance.get('/booking');
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export const getBookingById = async (bookingId: string) => {
+  try {
+    const response = await axiosInstance.get(`/booking/${bookingId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
