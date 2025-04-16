@@ -10,6 +10,7 @@ import { CartProvider } from './context/CartContext';
 import { UIProvider } from './context/UIContext';
 import useAuth from './hooks/useAuth';
 import Home from './pages/Home/Home';
+import BookTable from './pages/BookTable/BookTable'; // P54d7
 
 function App() {
   const [count, setCount] = useState(0);
@@ -46,6 +47,7 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <Home />
+          <BookTable /> {/* P9e37 */}
         </CartProvider>
       </AuthProvider>
     </UIProvider>

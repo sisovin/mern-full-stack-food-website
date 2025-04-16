@@ -30,6 +30,13 @@ const Navbar: React.FC<NavbarProps> = ({ links, logo }) => {
               {link.name}
             </a>
           ))}
+          <a
+            key="BookTable"
+            href="/book-table"
+            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Book Table
+          </a>
         </div>
       </div>
     </nav>
