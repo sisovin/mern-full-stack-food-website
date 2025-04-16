@@ -1,17 +1,17 @@
-import WebSocket from 'ws';
+import { Server as SocketIOServer } from 'socket.io';
 
-const wss = new WebSocket.Server({ noServer: true });
+const io = new SocketIOServer();
 
-wss.on('connection', (ws) => {
+io.on('connection', (socket) => {
   console.log('New client connected');
 
-  ws.on('message', (message) => {
+  socket.on('message', (message) => {
     console.log(`Received message: ${message}`);
   });
 
-  ws.on('close', () => {
+  socket.on('disconnect', () => {
     console.log('Client disconnected');
   });
 });
 
-export default wss;
+export default io;

@@ -1,11 +1,7 @@
-import wss from './socketServer';
+import io from './socketServer';
 
 const sendNotification = (message: string) => {
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
-    }
-  });
+  io.emit('notification', message);
 };
 
 export { sendNotification };
