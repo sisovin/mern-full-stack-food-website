@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
-import i18next from './config/i18n';
+import { i18next, i18nextMiddleware } from './config/i18n';
 import { generateToken, verifyToken } from './config/jwt';
 import logger from './config/winston';
 import http from 'http';
@@ -83,6 +83,9 @@ app.use(loggerMiddleware);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
+
+// i18next middleware
+app.use(i18nextMiddleware.handle(i18next));
 
 // API routes
 const apiPrefix = process.env.API_PREFIX || '/api';
