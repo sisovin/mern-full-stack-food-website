@@ -9,16 +9,10 @@ interface CartItem {
 
 interface CartContextType {
   cart: CartItem[];
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
-  clearCart: () => void;
 }
 
 const CartContext = createContext<CartContextType>({
   cart: [],
-  addItem: () => {},
-  removeItem: () => {},
-  clearCart: () => {},
 });
 
 interface CartProviderProps {
@@ -28,31 +22,8 @@ interface CartProviderProps {
 const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
 
-  const addItem = (item: CartItem) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((cartItem) => cartItem.id === item.id);
-      if (existingItem) {
-        return prevCart.map((cartItem) =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-            : cartItem
-        );
-      } else {
-        return [...prevCart, item];
-      }
-    });
-  };
-
-  const removeItem = (id: string) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== id));
-  };
-
-  const clearCart = () => {
-    setCart([]);
-  };
-
   return (
-    <CartContext.Provider value={{ cart, addItem, removeItem, clearCart }}>
+    <CartContext.Provider value={{ cart }}>
       {children}
     </CartContext.Provider>
   );

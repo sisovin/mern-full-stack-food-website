@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { CartContext } from '../../context/CartContext';
+import React from 'react';
+import useCart from '../../hooks/useCart';
 
 interface MenuCardProps {
   id: string;
@@ -10,7 +10,7 @@ interface MenuCardProps {
 }
 
 const MenuCard: React.FC<MenuCardProps> = ({ id, name, description, price, imageUrl }) => {
-  const { addItem } = useContext(CartContext);
+  const { addItem } = useCart();
 
   const handleAddToCart = () => {
     const item = { id, name, price, quantity: 1 };
