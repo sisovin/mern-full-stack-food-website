@@ -21,3 +21,7 @@
   display: flex;
   gap: var(--padding-medium);
 }
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}

@@ -9,3 +9,7 @@
 .button:hover {
   background-color: var(--color-primary-dark);
 }
+
+.bounce {
+  animation: bounce 1s infinite;
+}

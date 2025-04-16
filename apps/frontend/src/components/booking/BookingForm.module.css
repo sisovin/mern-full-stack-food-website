@@ -30,3 +30,7 @@
 .form button:hover {
   background-color: var(--color-primary-dark);
 }
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
