@@ -1,4 +1,4 @@
-import { getAllMenuItems, getMenuItemById, createMenuItem, updateMenuItem, deleteMenuItem } from '../services/menuService';
+import { getAllMenuItems, getMenuItemById, createMenuItem, updateMenuItem, deleteMenuItem, getMenuItemsByCategory } from '../services/menuService';
 
 const getAllMenus = async (req, res) => {
   try {
@@ -50,4 +50,14 @@ const deleteMenu = async (req, res) => {
   }
 };
 
-export { getAllMenus, getMenuById, createMenu, updateMenu, deleteMenu };
+const getFilteredMenus = async (req, res) => {
+  try {
+    const category = req.query.category;
+    const menuItems = await getMenuItemsByCategory(category);
+    res.status(200).json(menuItems);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export { getAllMenus, getMenuById, createMenu, updateMenu, deleteMenu, getFilteredMenus };

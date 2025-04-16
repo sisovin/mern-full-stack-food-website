@@ -35,4 +35,9 @@ const deleteMenuItem = async (menuItemId: string) => {
   return deletedMenuItem;
 };
 
-export { getAllMenuItems, getMenuItemById, createMenuItem, updateMenuItem, deleteMenuItem };
+const getMenuItemsByCategory = async (category: string) => {
+  const menuItems = await Menu.find({ category });
+  return menuItems;
+};
+
+export { getAllMenuItems, getMenuItemById, createMenuItem, updateMenuItem, deleteMenuItem, getMenuItemsByCategory };
