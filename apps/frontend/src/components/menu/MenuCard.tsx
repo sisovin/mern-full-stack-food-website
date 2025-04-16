@@ -1,6 +1,7 @@
 import React from 'react';
 import useCart from '../../hooks/useCart';
 import useMenu from '../../hooks/useMenu';
+import styles from './MenuCard.module.css';
 
 interface MenuCardProps {
   id: string;
@@ -24,13 +25,13 @@ const MenuCard: React.FC<MenuCardProps> = ({ id, name, description, price, image
   }
 
   return (
-    <div className="menu-card">
-      <img src={imageUrl} alt={name} className="menu-card-image" />
-      <div className="menu-card-content">
-        <h3 className="menu-card-title">{name}</h3>
-        <p className="menu-card-description">{description}</p>
-        <p className="menu-card-price">${price.toFixed(2)}</p>
-        <button onClick={handleAddToCart}>Add to Cart</button>
+    <div className={styles['menu-card']}>
+      <img src={imageUrl} alt={name} className={styles['menu-card-image']} />
+      <div className={styles['menu-card-content']}>
+        <h3 className={styles['menu-card-title']}>{name}</h3>
+        <p className={styles['menu-card-description']}>{description}</p>
+        <p className={styles['menu-card-price']}>${price.toFixed(2)}</p>
+        <button className={styles['menu-card-button']} onClick={handleAddToCart}>Add to Cart</button>
       </div>
     </div>
   );

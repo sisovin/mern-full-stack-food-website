@@ -17,3 +17,12 @@ export const fetchMenuCategories = async () => {
     throw error;
   }
 };
+
+export const fetchMenuItemsByCategory = async (category: string) => {
+  try {
+    const response = await axiosInstance.get(`/menu/filter?category=${category}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
