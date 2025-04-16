@@ -1,6 +1,6 @@
 import request from 'supertest';
-import app from '../app';
-import Blog from '../models/Blog';
+import app from '../../app';
+import Blog from '../../models/Blog';
 import mongoose from 'mongoose';
 
 beforeAll(async () => {

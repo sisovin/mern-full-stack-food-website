@@ -1,15 +1,21 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": true
   },
   "references": [
     { "path": "./apps/backend" },
     { "path": "./apps/frontend" }
-  ]
+  ],
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist"]
 }

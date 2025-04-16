@@ -1,6 +1,7 @@
 import { getUserById, updateUser, deleteUser } from '../services/userService';
 
-const getUser = async (req, res) => {
+export const getUser = (req: Request, res: Response, next: NextFunction): void => {
+  // Your existing implementation with res.json() or similar but don't return it
   try {
     const userId = req.params.id;
     const user = await getUserById(userId);
@@ -10,7 +11,7 @@ const getUser = async (req, res) => {
   }
 };
 
-const updateUser = async (req, res) => {
+const updateUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId = req.params.id;
     const updateData = req.body;
@@ -21,13 +22,13 @@ const updateUser = async (req, res) => {
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userId = req.params.id;
     await deleteUser(userId);
     res.status(200).json({ message: 'User deleted successfully' });
   } catch (error) {
-    res.status(404).json({ message: error.message });
+    next(error);
   }
 };
 

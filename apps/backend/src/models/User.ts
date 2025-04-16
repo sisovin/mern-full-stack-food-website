@@ -33,7 +33,7 @@ UserSchema.pre<IUser>('save', async function (next) {
     const hashedPassword = await hashPassword(this.password);
     this.password = hashedPassword;
     next();
-  } catch (err) {
+  } catch (err: any) {
     next(err);
   }
 });

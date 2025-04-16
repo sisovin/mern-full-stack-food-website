@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 
-const app = express();
+const app: express.Application = express();
 
 // Add CORS middleware with proper configuration
 app.use(cors({

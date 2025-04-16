@@ -1,5 +1,10 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get the equivalent of __dirname in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Load environment variables first, before importing any other module
 dotenv.config({
@@ -9,7 +14,9 @@ dotenv.config({
 import http from 'http';
 import { AddressInfo } from 'net';
 /* import app from './app'; */
-import app from './minimal-app';  // Change this line
+import app from './minimal-app.js';  // Add .js extension here
+
+// Rest of your code remains unchanged
 
 // Handle uncaught exceptions
 process.on('uncaughtException', (err: Error) => {
