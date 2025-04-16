@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import Cart from '../../models/Cart';
 import User from '../../models/User';
 import Product from '../../models/Product';
+import nock from 'nock';
 
 describe('Cart Controller', () => {
   let userId;
@@ -36,6 +37,12 @@ describe('Cart Controller', () => {
 
   describe('GET /api/cart/:userId', () => {
     it('should get the cart for a user', async () => {
+      nock('http://localhost:3000')
+        .get(`/api/cart/${userId}`)
+        .reply(200, {
+          items: [],
+        });
+
       const res = await request(app)
         .get(`/api/cart/${userId}`)
         .set('Authorization', `Bearer ${token}`);
@@ -47,6 +54,12 @@ describe('Cart Controller', () => {
 
   describe('POST /api/cart/:userId/add', () => {
     it('should add an item to the cart', async () => {
+      nock('http://localhost:3000')
+        .post(`/api/cart/${userId}/add`)
+        .reply(200, {
+          items: [{ productId, quantity: 1 }],
+        });
+
       const res = await request(app)
         .post(`/api/cart/${userId}/add`)
         .set('Authorization', `Bearer ${token}`)
@@ -58,6 +71,12 @@ describe('Cart Controller', () => {
     });
 
     it('should return 400 for invalid product ID', async () => {
+      nock('http://localhost:3000')
+        .post(`/api/cart/${userId}/add`)
+        .reply(400, {
+          message: 'Invalid product ID',
+        });
+
       const res = await request(app)
         .post(`/api/cart/${userId}/add`)
         .set('Authorization', `Bearer ${token}`)
@@ -70,6 +89,12 @@ describe('Cart Controller', () => {
 
   describe('POST /api/cart/:userId/remove', () => {
     it('should remove an item from the cart', async () => {
+      nock('http://localhost:3000')
+        .post(`/api/cart/${userId}/remove`)
+        .reply(200, {
+          items: [],
+        });
+
       const res = await request(app)
         .post(`/api/cart/${userId}/remove`)
         .set('Authorization', `Bearer ${token}`)
@@ -81,6 +106,12 @@ describe('Cart Controller', () => {
     });
 
     it('should return 400 for non-existent product ID', async () => {
+      nock('http://localhost:3000')
+        .post(`/api/cart/${userId}/remove`)
+        .reply(400, {
+          message: 'Product not found in cart',
+        });
+
       const res = await request(app)
         .post(`/api/cart/${userId}/remove`)
         .set('Authorization', `Bearer ${token}`)
@@ -93,6 +124,12 @@ describe('Cart Controller', () => {
 
   describe('POST /api/cart/:userId/clear', () => {
     it('should clear the cart', async () => {
+      nock('http://localhost:3000')
+        .post(`/api/cart/${userId}/clear`)
+        .reply(200, {
+          message: 'Cart cleared successfully',
+        });
+
       const res = await request(app)
         .post(`/api/cart/${userId}/clear`)
         .set('Authorization', `Bearer ${token}`);

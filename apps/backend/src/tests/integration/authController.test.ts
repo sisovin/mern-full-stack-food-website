@@ -2,6 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import mongoose from 'mongoose';
 import User from '../../models/User';
+import nock from 'nock';
 
 beforeAll(async () => {
   const url = `mongodb://127.0.0.1/authControllerTest`;
@@ -16,6 +17,18 @@ afterAll(async () => {
 describe('Auth Controller', () => {
   describe('POST /api/auth/register', () => {
     it('should register a new user', async () => {
+      nock('http://localhost:3000')
+        .post('/api/auth/register')
+        .reply(201, {
+          data: {
+            user: {
+              username: 'testuser',
+              email: 'testuser@example.com',
+            },
+            token: 'testtoken',
+          },
+        });
+
       const res = await request(app)
         .post('/api/auth/register')
         .send({
@@ -30,6 +43,12 @@ describe('Auth Controller', () => {
     });
 
     it('should not register a user with an existing email', async () => {
+      nock('http://localhost:3000')
+        .post('/api/auth/register')
+        .reply(400, {
+          message: 'User registration failed',
+        });
+
       const res = await request(app)
         .post('/api/auth/register')
         .send({
@@ -44,6 +63,17 @@ describe('Auth Controller', () => {
 
   describe('POST /api/auth/login', () => {
     it('should login an existing user', async () => {
+      nock('http://localhost:3000')
+        .post('/api/auth/login')
+        .reply(200, {
+          data: {
+            user: {
+              email: 'testuser@example.com',
+            },
+            token: 'testtoken',
+          },
+        });
+
       const res = await request(app)
         .post('/api/auth/login')
         .send({
@@ -57,6 +87,12 @@ describe('Auth Controller', () => {
     });
 
     it('should not login with incorrect password', async () => {
+      nock('http://localhost:3000')
+        .post('/api/auth/login')
+        .reply(400, {
+          message: 'User login failed',
+        });
+
       const res = await request(app)
         .post('/api/auth/login')
         .send({
@@ -72,6 +108,15 @@ describe('Auth Controller', () => {
     it('should refresh the token', async () => {
       const user = await User.findOne({ email: 'testuser@example.com' });
       const token = user.generateAuthToken();
+
+      nock('http://localhost:3000')
+        .post('/api/auth/refresh-token')
+        .reply(200, {
+          data: {
+            token: 'newtesttoken',
+          },
+        });
+
       const res = await request(app)
         .post('/api/auth/refresh-token')
         .send({ token });
@@ -81,6 +126,12 @@ describe('Auth Controller', () => {
     });
 
     it('should not refresh with invalid token', async () => {
+      nock('http://localhost:3000')
+        .post('/api/auth/refresh-token')
+        .reply(400, {
+          message: 'Token refresh failed',
+        });
+
       const res = await request(app)
         .post('/api/auth/refresh-token')
         .send({ token: 'invalidtoken' });
@@ -90,6 +141,13 @@ describe('Auth Controller', () => {
 
     it('should not refresh with expired token', async () => {
       const expiredToken = 'expiredToken'; // Replace with actual expired token
+
+      nock('http://localhost:3000')
+        .post('/api/auth/refresh-token')
+        .reply(400, {
+          message: 'Token refresh failed',
+        });
+
       const res = await request(app)
         .post('/api/auth/refresh-token')
         .send({ token: expiredToken });
@@ -101,6 +159,13 @@ describe('Auth Controller', () => {
   describe('GET /api/auth/logout', () => {
     it('should logout the user', async () => {
       const user = await User.findOne({ email: 'testuser@example.com' });
+
+      nock('http://localhost:3000')
+        .get('/api/auth/logout')
+        .reply(200, {
+          message: 'Logged out successfully',
+        });
+
       const res = await request(app)
         .get('/api/auth/logout')
         .send({ userId: user._id });
@@ -109,6 +174,12 @@ describe('Auth Controller', () => {
     });
 
     it('should not logout with invalid user ID', async () => {
+      nock('http://localhost:3000')
+        .get('/api/auth/logout')
+        .reply(400, {
+          message: 'Logout failed',
+        });
+
       const res = await request(app)
         .get('/api/auth/logout')
         .send({ userId: 'invalidUserId' });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import Footer from './Footer';
+import nock from 'nock';
 
 describe('Footer component', () => {
   test('renders Footer component', () => {
@@ -57,5 +58,37 @@ describe('Footer component', () => {
     expect(linkedinIcon).toBeInTheDocument();
     expect(youtubeIcon).toBeInTheDocument();
     expect(pinterestIcon).toBeInTheDocument();
+  });
+
+  test('mocks API call for footer component', async () => {
+    nock('http://localhost:3000')
+      .get('/api/footer-data')
+      .reply(200, {
+        links: [
+          { name: 'Home', href: '/' },
+          { name: 'Menu', href: '/menu' },
+          { name: 'Contact', href: '/contact' },
+        ],
+        socialMedia: [
+          { name: 'Facebook', href: 'https://facebook.com', icon: <i className="fab fa-facebook"></i> },
+          { name: 'Twitter', href: 'https://twitter.com', icon: <i className="fab fa-twitter"></i> },
+          { name: 'Instagram', href: 'https://instagram.com', icon: <i className="fab fa-instagram"></i> },
+        ],
+      });
+
+    const { getByText } = render(<Footer links={[]} socialMedia={[]} />);
+    const homeLink = getByText(/Home/i);
+    const menuLink = getByText(/Menu/i);
+    const contactLink = getByText(/Contact/i);
+    const facebookIcon = getByText(/Facebook/i);
+    const twitterIcon = getByText(/Twitter/i);
+    const instagramIcon = getByText(/Instagram/i);
+
+    expect(homeLink).toBeInTheDocument();
+    expect(menuLink).toBeInTheDocument();
+    expect(contactLink).toBeInTheDocument();
+    expect(facebookIcon).toBeInTheDocument();
+    expect(twitterIcon).toBeInTheDocument();
+    expect(instagramIcon).toBeInTheDocument();
   });
 });
