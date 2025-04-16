@@ -1,5 +1,6 @@
 import React from 'react';
 import useCart from '../../hooks/useCart';
+import useMenu from '../../hooks/useMenu';
 
 interface MenuCardProps {
   id: string;
@@ -11,11 +12,16 @@ interface MenuCardProps {
 
 const MenuCard: React.FC<MenuCardProps> = ({ id, name, description, price, imageUrl }) => {
   const { addItem } = useCart();
+  const { menuItems, loading } = useMenu();
 
   const handleAddToCart = () => {
     const item = { id, name, price, quantity: 1 };
     addItem(item);
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="menu-card">
