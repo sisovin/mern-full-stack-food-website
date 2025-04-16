@@ -14,6 +14,13 @@ const Navbar: React.FC<NavbarProps> = ({ links, logo }) => {
           <span className="text-white text-lg font-semibold">Food Website</span>
         </div>
         <div className="flex space-x-4">
+          <a
+            key="Home"
+            href="/"
+            className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+          >
+            Home
+          </a>
           {links.map((link) => (
             <a
               key={link.name}
