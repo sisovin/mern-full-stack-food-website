@@ -36,3 +36,7 @@
 .modal-close-button:hover {
   background-color: var(--color-danger-dark);
 }
+
+.slide-up {
+  animation: slideUp 0.5s ease-in-out;
+}

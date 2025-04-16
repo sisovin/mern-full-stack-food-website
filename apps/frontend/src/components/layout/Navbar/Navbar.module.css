@@ -37,3 +37,7 @@
   background-color: var(--color-dark-hover);
   color: var(--color-light-hover);
 }
+
+.fade-in {
+  animation: fadeIn 1s ease-in-out;
+}
