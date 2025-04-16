@@ -11,6 +11,7 @@ import { i18next, i18nextMiddleware } from './config/i18n';
 import { generateToken, verifyToken } from './config/jwt';
 import logger from './config/winston';
 import http from 'http';
+import { Server as SocketIOServer } from 'socket.io';
 import wss from './websockets/socketServer';
 
 // Import config
@@ -122,10 +123,29 @@ app.use(errorHandler);
 // Create HTTP server
 const server = http.createServer(app);
 
+// Initialize Socket.IO server
+const io = new SocketIOServer(server, {
+  cors: {
+    origin: allowedOrigins,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true,
+  },
+});
+
 // Add WebSocket server to HTTP server
 server.on('upgrade', (request, socket, head) => {
   wss.handleUpgrade(request, socket, head, (ws) => {
     wss.emit('connection', ws, request);
+  });
+});
+
+// Add event listeners for connection and disconnection
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
   });
 });
 

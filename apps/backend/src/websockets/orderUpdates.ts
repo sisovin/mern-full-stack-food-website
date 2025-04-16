@@ -1,12 +1,8 @@
-import wss from './socketServer';
+import io from './socketServer';
 
 const sendOrderStatusUpdate = (orderId: string, status: string) => {
-  const message = JSON.stringify({ orderId, status });
-  wss.clients.forEach((client) => {
-    if (client.readyState === WebSocket.OPEN) {
-      client.send(message);
-    }
-  });
+  const message = { orderId, status };
+  io.emit('orderStatusUpdate', message);
 };
 
 export { sendOrderStatusUpdate };
