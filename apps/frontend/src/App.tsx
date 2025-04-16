@@ -5,6 +5,7 @@ import './App.css';
 import BookingForm from './components/booking/BookingForm';
 import BlogCard from './components/blog/BlogCard';
 import CommentSection from './components/blog/CommentSection';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -36,7 +37,7 @@ function App() {
   };
 
   return (
-    <>
+    <AuthProvider>
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -65,7 +66,7 @@ function App() {
         createdAt={sampleBlogPost.createdAt}
       />
       <CommentSection comments={sampleComments} onAddComment={handleAddComment} />
-    </>
+    </AuthProvider>
   );
 }
 
