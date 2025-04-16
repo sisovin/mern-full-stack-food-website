@@ -8,9 +8,11 @@ import CommentSection from './components/blog/CommentSection';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { UIProvider } from './context/UIContext';
+import useAuth from './hooks/useAuth';
 
 function App() {
   const [count, setCount] = useState(0);
+  const { user, setUser } = useAuth();
 
   const sampleBlogPost = {
     title: 'Sample Blog Post',
